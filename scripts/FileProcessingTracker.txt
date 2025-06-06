@@ -1,0 +1,18 @@
+CREATE TABLE `FileProcessingTracker` (
+  `Id` VARCHAR(64) NOT NULL,                             -- Unique ID for each progress event (e.g., GUID)
+  `ProcessId` VARCHAR(64) NOT NULL,                      -- Logical ID grouping all entries for the same file
+  `ProcessType` VARCHAR(100) NOT NULL,                   -- e.g., 'tolltransaction', 'masscardcreation'
+  `FileName` VARCHAR(255) NOT NULL,
+  `Path` VARCHAR(1024) NOT NULL,
+  `ContentType` VARCHAR(100),
+  `FileHash` VARCHAR(128) NOT NULL,
+  `ProcessingStage` VARCHAR(100),                        -- e.g., Uploading, Scanned, Validating, Completed
+  `ProgressPercent` INT DEFAULT 0,
+  `ErrorMessage` TEXT,
+  `Status` INT NOT NULL DEFAULT 0,                       -- 0 = active, 1 = logically deleted
+  `UserId` VARCHAR(64) NOT NULL,
+  `CreatedAtTimestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (`Id`),
+  INDEX `idx_process_stage` (`ProcessId`, `CreatedAtTimestamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
